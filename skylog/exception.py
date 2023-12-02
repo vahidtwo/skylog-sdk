@@ -1,3 +1,6 @@
+from typing import Optional, Union
+
+
 class CustomBaseException(Exception):
     """
     Custom Exception class with default message
@@ -20,7 +23,14 @@ class CustomBaseException(Exception):
 
     default_message = ""
 
-    def __init__(self, /, message: str = None, *, extra_explanation: str = "", **kwargs: Optional[Union[str, int]]):
+    def __init__(
+        self,
+        /,
+        message: str = None,
+        *,
+        extra_explanation: str = "",
+        **kwargs: Optional[Union[str, int]],
+    ):
         message = f"{self.default_message}" if message is None else f"{message}"
         if extra_explanation:
             message = f"{message}\n{extra_explanation}"

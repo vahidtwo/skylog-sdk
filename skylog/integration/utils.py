@@ -1,10 +1,9 @@
-import dataclasses
-from typing import Callable, Any
+from typing import Callable, Any, Type
 
-from decouple import config
 from requests import Session, Request
 
 from skylog.exception import RetryException
+from skylog.integration.config import LazySettings
 
 
 class RetryMixin:
@@ -27,33 +26,17 @@ class RetryMixin:
         raise RetryException(count=count) from last_exception
 
 
-@dataclasses.dataclass
-class BaseClientSettings:
-    PROXY_USERNAME: str = config('PROXY_USERNAME')
-    PROXY_PASSWORD: str = config('PROXY_PASSWORD')
-    PROXY_IP: str = config('PROXY_IP')
-    PROXY_PORT: str = config('PROXY_PORT')
-    SKY_LOG_ALERTING_TELEGRAM_ALERT_NAME: str = config('DEFAULT_SKY_LOG_ALERTING_TELEGRAM_ALERT_NAME')
-    SKY_LOG_ALERTING_PHONE_CALL_ALERT_NAME: str = config('DEFAULT_SKY_LOG_ALERTING_PHONE_CALL_ALERT_NAME')
-    SKY_LOG_ALERTING_SMS_ALERT_NAME: str = config('DEFAULT_SKY_LOG_ALERTING_SMS_ALERT_NAME')
-    SKY_LOG_BASE_URL: str = config('SKY_LOG_BASE_URL')
-    SKY_LOG_ALERTING_TOKEN: str = config('SKY_LOG_ALERTING_TOKEN')
-
-
-settings = BaseClientSettings
-
-
 class BaseClient:
     base_url = ""
     use_proxy = True
     verify_ssl = True
     requests_timeout = 30
 
-    def __init__(self, client_config: BaseClientSettings):
-        self.proxy_username = self.clean_string(client_config.PROXY_USERNAME)
-        self.proxy_password = self.clean_string(client_config.PROXY_PASSWORD)
-        self.proxy_ip = self.clean_string(client_config.PROXY_IP)
-        self.proxy_port = self.clean_string(client_config.PROXY_PORT)
+    def __init__(self, settings: Type[LazySettings]):
+        self.proxy_username = self.clean_string(settings.PROXY_USERNAME)
+        self.proxy_password = self.clean_string(settings.PROXY_PASSWORD)
+        self.proxy_ip = self.clean_string(settings.PROXY_IP)
+        self.proxy_port = self.clean_string(settings.PROXY_PORT)
         self.session = self.create_session()
 
     @staticmethod
@@ -69,21 +52,24 @@ class BaseClient:
 
     def create_proxy(self):
         url = "http://{username}:{password}@{ip}:{port}".format(
-            username=self.proxy_username, password=self.proxy_password, ip=self.proxy_ip, port=self.proxy_port
+            username=self.proxy_username,
+            password=self.proxy_password,
+            ip=self.proxy_ip,
+            port=self.proxy_port,
         )
         return {"http": url, "https": url, "ftp": url}
 
     def request(
-            self,
-            url=None,
-            path="",
-            method="post",
-            params=None,
-            data=None,
-            headers=None,
-            proxy=None,
-            auth=None,
-            json=None,
+        self,
+        url=None,
+        path="",
+        method="post",
+        params=None,
+        data=None,
+        headers=None,
+        proxy=None,
+        auth=None,
+        json=None,
     ):
         url = url or f"{self.base_url}{path}"
         self.session.proxies = proxy or self.session.proxies

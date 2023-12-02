@@ -1,7 +1,8 @@
 
 # Python SDK for Skylog Integration
 
-Skylog is a robust service designed for seamless integration with various platforms like Sentry, Telegram, and more, enabling the efficient transmission of logs and rapid identification of issues.
+Skylog is a robust service designed for seamless integration with various platforms like Sentry, Telegram,
+and more, enabling the efficient transmission of logs and rapid identification of issues.
 
 This Python SDK facilitates easy interaction with Skylog services, allowing users to:
 - fire alert
@@ -11,7 +12,7 @@ This Python SDK facilitates easy interaction with Skylog services, allowing user
 # How to install 
 install from gitlab 
 ```bash
-pip install git+https://gitlab.qcluster.org/vahidtwo/skylog-sdk.git
+pip install skylog-sdk
 ```
 
 ## Setup and Configuration

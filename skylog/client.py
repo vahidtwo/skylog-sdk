@@ -1,31 +1,15 @@
-import dataclasses
 import logging
-from typing import Optional
+from typing import Optional, Type
 
 from requests import Response
 
-from .integration.abc import BaseAlertingProvider, BaseAlertingSkyLogClient
 from .exception import RetryException
+from .integration import AlertingProvider
+from .integration.abc import BaseAlertingSkyLogClient
+from .integration.config import LazySettings
 from .integration.utils import RetryMixin, BaseClient
 
 logger = logging.getLogger(__name__)
-
-try:
-    from django.conf import settings
-
-
-    @dataclasses.dataclass
-    class AlertingProvider(BaseAlertingProvider):
-        telegram = settings.SKY_LOG_ALERTING_TELEGRAM_ALERT_NAME
-        phone_call = settings.SKY_LOG_ALERTING_PHONE_CALL_ALERT_NAME
-        sms = settings.SKY_LOG_ALERTING_SMS_ALERT_NAME
-except ImportError:
-    from integration.utils import settings
-    @dataclasses.dataclass
-    class AlertingProvider(BaseAlertingProvider):
-        telegram = settings.SKY_LOG_ALERTING_TELEGRAM_ALERT_NAME
-        phone_call = settings.SKY_LOG_ALERTING_PHONE_CALL_ALERT_NAME
-        sms = settings.SKY_LOG_ALERTING_SMS_ALERT_NAME
 
 
 class AlertingSkyLogClient(BaseAlertingSkyLogClient, RetryMixin, BaseClient):
@@ -34,7 +18,7 @@ class AlertingSkyLogClient(BaseAlertingSkyLogClient, RetryMixin, BaseClient):
 
 
     usage:
-        >>> client = AlertingSkyLogClient(instance_name='shaparak-ftp')
+        >>> client = AlertingSkyLogClient(instance_name='shaparak-ftp', default_provider=AlertingProvider.telegram)
         >>> client.fire_alert(description="test")
     you can determine provider to send data to that alert with a specific endpoint
     at this time this there are 2 kinds of allert, Telegram, Phone call, SMS,
@@ -48,33 +32,40 @@ class AlertingSkyLogClient(BaseAlertingSkyLogClient, RetryMixin, BaseClient):
     base_url = ...
 
     def __init__(
-            self,
-            instance_name: str = 'default',
-            *,
-            provider: Optional[BaseAlertingProvider] = None,
-            provider_dataclass: BaseAlertingProvider = AlertingProvider,
-            use_proxy: bool = False,
-            **kwargs,
+        self,
+        instance_name: str = "default",
+        *,
+        default_provider: str,
+        provider_dataclass: Type[AlertingProvider] = AlertingProvider,
+        use_proxy: bool = False,
+        settings: Optional[LazySettings] = None,
+        **kwargs,
     ):
+        if settings is None:
+            try:
+                from django.conf import settings
+            except ImportError:
+                from skylog.integration.config import settings
         self.base_url = settings.SKY_LOG_BASE_URL
         self._provider_dataclass = provider_dataclass
         self.token = settings.SKY_LOG_ALERTING_TOKEN
         self.token_type = "Bearer"
         self._instance_name = instance_name
-        self.provider = provider or self._provider_dataclass.telegram
+        self.provider = default_provider
         self.use_proxy = use_proxy
+        self.settings = settings
         for key, value in kwargs.items():
             setattr(self, key, value)
-        super().__init__()
+        super().__init__(settings=settings)
 
     def fire_alert(
-            self,
-            description: str,
-            *,
-            instance_name: str = None,
-            summery=None,
-            provider: Optional[BaseAlertingProvider] = None,
-            notify_on_duplicate: bool = False,
+        self,
+        description: str,
+        *,
+        instance_name: str = None,
+        summery=None,
+        provider: Optional[AlertingProvider] = None,
+        notify_on_duplicate: bool = False,
     ) -> bool:
         """
         firing an alert cause to add a record in triggered list in the panel and Immediately notice messages are sent
@@ -90,13 +81,13 @@ class AlertingSkyLogClient(BaseAlertingSkyLogClient, RetryMixin, BaseClient):
         )
 
     def stop_alert(
-            self,
-            description: str,
-            *,
-            instance_name: str = None,
-            summery: str = None,
-            provider: Optional[BaseAlertingProvider] = None,
-            notify_on_duplicate: bool = False,
+        self,
+        description: str,
+        *,
+        instance_name: str = None,
+        summery: str = None,
+        provider: Optional[AlertingProvider] = None,
+        notify_on_duplicate: bool = False,
     ) -> bool:
         """
         Stopping a fired alert cause remove its record in triggered list furthermore
@@ -113,12 +104,12 @@ class AlertingSkyLogClient(BaseAlertingSkyLogClient, RetryMixin, BaseClient):
         )
 
     def notify(
-            self,
-            description: str,
-            instance_name: str = None,
-            summery: str = None,
-            *,
-            provider: Optional[BaseAlertingProvider] = None,
+        self,
+        description: str,
+        instance_name: str = None,
+        summery: str = None,
+        *,
+        provider: Optional[AlertingProvider] = None,
     ) -> bool:
         """
         Stopping a fired alert cause remove its record in triggered list furthermore
@@ -135,14 +126,14 @@ class AlertingSkyLogClient(BaseAlertingSkyLogClient, RetryMixin, BaseClient):
         )
 
     def _request(
-            self,
-            description: str,
-            instance_name: str,
-            summery: str,
-            path: str,
-            *,
-            provider: Optional[BaseAlertingProvider] = None,
-            notify_on_duplicate: bool = False,
+        self,
+        description: str,
+        instance_name: str,
+        summery: str,
+        path: str,
+        *,
+        provider: Optional[AlertingProvider] = None,
+        notify_on_duplicate: bool = False,
     ) -> bool:
         """
         Parameter:
@@ -194,10 +185,7 @@ class AlertingSkyLogClient(BaseAlertingSkyLogClient, RetryMixin, BaseClient):
                 },
             )
             return False
-        if (
-                notify_on_duplicate
-                and data.get("message") == self.duplicate_request_message
-        ):
+        if notify_on_duplicate and data.get("message") == self.duplicate_request_message:
             return self.notify(
                 description=description,
                 instance_name=instance_name,
@@ -205,4 +193,4 @@ class AlertingSkyLogClient(BaseAlertingSkyLogClient, RetryMixin, BaseClient):
                 provider=provider,
             )
 
-        return False
+        return True

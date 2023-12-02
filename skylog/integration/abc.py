@@ -1,33 +1,15 @@
-import dataclasses
 from abc import ABC, abstractmethod
 from typing import Optional
 
-
-@dataclasses.dataclass
-class BaseAlertingProvider(ABC):
-    telegram: str = ...
-    phone_call: str = ...
-    sms: str = ...
+from skylog.integration import AlertingProvider
+from skylog.integration.utils import BaseClient, RetryMixin
 
 
-class BaseAlertingSkyLogClient(ABC):
-
+class BaseAlertingSkyLogClient(RetryMixin, BaseClient, ABC):
     """
     client to send alert to skylog
     """
 
-    base_url = ...
-
-    def __init__(
-        self,
-        instance_name: str,
-        *,
-        provider: Optional[BaseAlertingProvider] = None,
-        provider_dataclass: BaseAlertingProvider = BaseAlertingProvider,
-        use_proxy: bool = False,
-        **kwargs,
-    ):
-        pass
     @abstractmethod
     def fire_alert(
         self,
@@ -35,14 +17,13 @@ class BaseAlertingSkyLogClient(ABC):
         *,
         instance_name: str = None,
         summery=None,
-        provider: Optional[BaseAlertingProvider] = None,
+        provider: Optional[AlertingProvider] = None,
         notify_on_duplicate: bool = False,
     ) -> bool:
         """
         firing an alert cause to add a record in triggered list in the panel and Immediately notice messages are sent
          to related endpoints.
         """
-        pass
 
     @abstractmethod
     def stop_alert(
@@ -51,7 +32,7 @@ class BaseAlertingSkyLogClient(ABC):
         *,
         instance_name: str = None,
         summery: str = None,
-        provider: Optional[BaseAlertingProvider] = None,
+        provider: Optional[AlertingProvider] = None,
         notify_on_duplicate: bool = False,
     ) -> bool:
         """
@@ -59,7 +40,6 @@ class BaseAlertingSkyLogClient(ABC):
         it's solving message are sent to endpoints.
         This procedure can be done manually in the panel or automatically by api call.
         """
-        pass
 
     @abstractmethod
     def notify(
@@ -68,14 +48,13 @@ class BaseAlertingSkyLogClient(ABC):
         instance_name: str = None,
         summery: str = None,
         *,
-        provider: Optional[BaseAlertingProvider] = None,
+        provider: Optional[AlertingProvider] = None,
     ) -> bool:
         """
         Stopping a fired alert cause remove its record in triggered list furthermore
         it's solving issue that sent to endpoints.
         This procedure can be done manually in the panel or automatically by api call.
         """
-        pass
 
     @abstractmethod
     def _request(
@@ -85,7 +64,7 @@ class BaseAlertingSkyLogClient(ABC):
         summery: str,
         path: str,
         *,
-        provider: Optional[BaseAlertingProvider] = None,
+        provider: Optional[AlertingProvider] = None,
         notify_on_duplicate: bool = False,
     ) -> bool:
         """
@@ -99,4 +78,3 @@ class BaseAlertingSkyLogClient(ABC):
             summery: summery to explain the situation more.
 
         """
-        pass

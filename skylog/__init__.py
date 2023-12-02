@@ -1,5 +1,1 @@
-__all__ = [
-    "AlertingSkyLogClient",
-    "AlertingProvider"
-]
-
+__all__ = ["AlertingSkyLogClient", "AlertingProvider"]

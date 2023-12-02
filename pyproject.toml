@@ -1,29 +1,27 @@
+[tool.black]
+line-length = 121
+target-version = ['py38']
+
+[tool.poetry]
+name = "skylog-sdk"
+version = "0.1.1"
+description = "skylog python sdk"
+authors = ["vahidtwo <vahidtwo@gmail.com>"]
+license = "beer-ware"
+readme = "README.md"
+repository = "https://github.com/vahidtwo/skylog-sdk"
+homepage = "https://github.com/vahidtwo/skylog-sdk"
+keywords = ["skylog", "log"]
+packages = [
+    { include = "skylog" },
+]
+
+
+[tool.poetry.dependencies]
+python = ">=3.8"
+requests = '2.27.1'
+python-decouple='3.6'
 
 [build-system]
-requires      = ["setuptools>=61.0.0", "wheel"]
-build-backend = "setuptools.build_meta"
-
-[project]
-name = "skylog_sdk"
-version = "0.0.1"
-description = "skylog alerting sdk"
-readme = "README.md"
-authors = [{ name = "Vahid Imanian", email = "vahidtwo@gmail.com" }]
-license = { file = "LICENSE" }
-classifiers = [
-    "License :: BEER-WARE LICENSE",
-    "Programming Language :: Python",
-    "Programming Language :: Python :: 3",
-]
-keywords = ["skylog", "sdk", "log"]
-dependencies = [
-    'requests==2.27.1',
-    'python-decouple==3.6'
-]
-requires-python = ">=3.9"
-
-[project.optional-dependencies]
-dev = ["black", "bumpver", "isort", "pip-tools", "pytest"]
-
-[project.urls]
-Homepage = "https://github.com/vahidtwo/skylog-sdk"
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
