@@ -1,4 +1,4 @@
-from skylog.client import AlertingSkyLogClient  # noqa
-from skylog.integration import AlertingProvider  # noqa
+from skylog.client import AlertingSkyLogClient
+from skylog.integration import AlertingProvider
 
 __all__ = ["AlertingSkyLogClient", "AlertingProvider"]

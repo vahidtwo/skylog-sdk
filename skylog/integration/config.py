@@ -32,7 +32,7 @@ class LazySettings:
     def _setup(self):
         if self._wrapped is None:
             setting = dataclasses.dataclass(ClientSettings)()
-            setting._setup()  # noQa
+            setting._setup()
             self._wrapped = setting
         return self._wrapped
 

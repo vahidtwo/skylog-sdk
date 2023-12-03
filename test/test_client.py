@@ -44,7 +44,7 @@ class ClientTestCase(TestCase):
         mock_retry = mock.patch("skylog.client.AlertingSkyLogClient.retry")
         self.mock_retry = mock_retry.start()
         self.provider = AlertingProvider(telegram="telegram", phone_call="phone_call", sms="sms")
-        self.client = AlertingSkyLogClient(default_provider=self.provider.telegram, settings=MockClientSettings)  # noQa
+        self.client = AlertingSkyLogClient(default_provider=self.provider.telegram, settings=MockClientSettings)
 
     def tearDown(self):
         self.mock_retry.stop()

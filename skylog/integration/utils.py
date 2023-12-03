@@ -1,6 +1,6 @@
-from typing import Callable, Any, Type
+from typing import Any, Callable, Type
 
-from requests import Session, Request
+from requests import Request, Session
 
 from skylog.exception import RetryException
 from skylog.integration.config import LazySettings

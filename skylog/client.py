@@ -4,10 +4,9 @@ from typing import Optional
 from requests import Response
 
 from .exception import RetryException
-from .integration import AlertingProvider
 from .integration.abc import BaseAlertingSkyLogClient
 from .integration.config import LazySettings
-from .integration.utils import RetryMixin, BaseClient
+from .integration.utils import BaseClient, RetryMixin
 
 logger = logging.getLogger(__name__)
 
