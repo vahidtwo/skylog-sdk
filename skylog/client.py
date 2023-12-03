@@ -36,7 +36,7 @@ class AlertingSkyLogClient(BaseAlertingSkyLogClient, RetryMixin, BaseClient):
         instance_name: str = "default",
         *,
         default_provider: str,
-        provider_dataclass: Type[AlertingProvider] = AlertingProvider,
+        provider_dataclass: Type[str] = AlertingProvider,
         use_proxy: bool = False,
         settings: Optional[LazySettings] = None,
         **kwargs,
@@ -64,7 +64,7 @@ class AlertingSkyLogClient(BaseAlertingSkyLogClient, RetryMixin, BaseClient):
         *,
         instance_name: str = None,
         summery=None,
-        provider: Optional[AlertingProvider] = None,
+        provider: Optional[str] = None,
         notify_on_duplicate: bool = False,
     ) -> bool:
         """
@@ -86,7 +86,7 @@ class AlertingSkyLogClient(BaseAlertingSkyLogClient, RetryMixin, BaseClient):
         *,
         instance_name: str = None,
         summery: str = None,
-        provider: Optional[AlertingProvider] = None,
+        provider: Optional[str] = None,
         notify_on_duplicate: bool = False,
     ) -> bool:
         """
@@ -109,7 +109,7 @@ class AlertingSkyLogClient(BaseAlertingSkyLogClient, RetryMixin, BaseClient):
         instance_name: str = None,
         summery: str = None,
         *,
-        provider: Optional[AlertingProvider] = None,
+        provider: Optional[str] = None,
     ) -> bool:
         """
         Stopping a fired alert cause remove its record in triggered list furthermore
@@ -132,7 +132,7 @@ class AlertingSkyLogClient(BaseAlertingSkyLogClient, RetryMixin, BaseClient):
         summery: str,
         path: str,
         *,
-        provider: Optional[AlertingProvider] = None,
+        provider: Optional[str] = None,
         notify_on_duplicate: bool = False,
     ) -> bool:
         """
