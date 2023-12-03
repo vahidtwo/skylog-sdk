@@ -1,1 +1,0 @@
-skylog-sdk
