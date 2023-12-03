@@ -24,6 +24,7 @@ class BaseAlertingSkyLogClient(RetryMixin, BaseClient, ABC):
         firing an alert cause to add a record in triggered list in the panel and Immediately notice messages are sent
          to related endpoints.
         """
+        raise NotImplementedError
 
     @abstractmethod
     def stop_alert(
@@ -40,6 +41,7 @@ class BaseAlertingSkyLogClient(RetryMixin, BaseClient, ABC):
         it's solving message are sent to endpoints.
         This procedure can be done manually in the panel or automatically by api call.
         """
+        raise NotImplementedError
 
     @abstractmethod
     def notify(
@@ -55,6 +57,7 @@ class BaseAlertingSkyLogClient(RetryMixin, BaseClient, ABC):
         it's solving issue that sent to endpoints.
         This procedure can be done manually in the panel or automatically by api call.
         """
+        raise NotImplementedError
 
     @abstractmethod
     def _request(
@@ -78,3 +81,4 @@ class BaseAlertingSkyLogClient(RetryMixin, BaseClient, ABC):
             summery: summery to explain the situation more.
 
         """
+        raise NotImplementedError

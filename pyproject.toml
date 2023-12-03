@@ -4,7 +4,7 @@ target-version = ['py38']
 
 [tool.poetry]
 name = "skylog-sdk"
-version = "0.1.6"
+version = "0.1.7"
 description = "skylog python sdk"
 authors = ["vahidtwo <vahidtwo@gmail.com>"]
 license = "beer-ware"

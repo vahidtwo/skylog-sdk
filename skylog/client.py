@@ -178,6 +178,14 @@ class AlertingSkyLogClient(BaseAlertingSkyLogClient, RetryMixin, BaseClient):
         if response.status_code != 200:
             return False
         data = response.json()
+        if notify_on_duplicate and data.get("message") == self.duplicate_request_message:
+            description = self.get_notify_on_duplicated_message(description)
+            return self.notify(
+                description=description,
+                instance_name=instance_name,
+                summery=summery,
+                provider=provider,
+            )
         if data["status"] is False:
             logger.error(
                 "failed to send alerting skylog",
@@ -189,12 +197,8 @@ class AlertingSkyLogClient(BaseAlertingSkyLogClient, RetryMixin, BaseClient):
                 },
             )
             return False
-        if notify_on_duplicate and data.get("message") == self.duplicate_request_message:
-            return self.notify(
-                description=description,
-                instance_name=instance_name,
-                summery=summery,
-                provider=provider,
-            )
-
         return True
+
+    @staticmethod
+    def get_notify_on_duplicated_message(description: str) -> str:
+        return f"{description}"
