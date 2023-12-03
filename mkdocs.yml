@@ -10,29 +10,42 @@ copyright: Maintained by <a href="https://vahidtwo.com">Florian</a>.
 nav:
   - Home: index.md
 plugins:
-  - search
-  - mkdocstrings:
-      handlers:
-        python:
-          setup_commands:
-            - import sys
-            - sys.path.append('../')
+  search: null
+  mkdocstrings:
+    handlers:
+      python:
+        options:
+          extensions:
+            - griffe_typingdoc
+          show_root_heading: true
+          show_if_no_docstring: true
+          preload_modules: [httpx, starlette]
+          inherited_members: true
+          members_order: source
+          separate_signature: true
+          unwrap_annotated: true
+          filters: ["!^_"]
+          merge_init_into_class: true
+          docstring_section_style: spacy
+          signature_crossrefs: true
+          show_symbol_type_heading: true
+          show_symbol_type_toc: true
 theme:
   name: material
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
-      primary: white
-      accent: deep orange
+      primary: teal
+      accent: amber
       toggle:
-        icon: material/brightness-7
+        icon: material/lightbulb
         name: Switch to dark mode
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
-      primary: black
-      accent: deep orange
+      primary: teal
+      accent: amber
       toggle:
-        icon: material/brightness-4
+        icon: material/lightbulb-outline
         name: Switch to light mode
   features:
     - search.suggest
@@ -46,7 +59,8 @@ theme:
     - content.code.select
     - navigation.tabs
   icon:
-    repo: fontawesome/brands/github
+    repo: fontawesome/brands/github-alt
+  language: en
 
 extra:
   social:
@@ -54,9 +68,18 @@ extra:
       link: https://github.com/vahidtwo/skylog-sdk
     - icon: fontawesome/brands/python
       link: https://pypi.org/project/skylog-sdk
+  analytics:
+    provider: google
 
 markdown_extensions:
+  - pymdownx.arithmatex
+  - pymdownx.highlight
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - admonition: null
+  - pymdownx.blocks.html
+  - pymdownx.details
+  - pymdownx.tabbed:
+      alternate_style: true
   - toc:
       permalink: true
-  - pymdownx.arithmatex:
-      generic: true
