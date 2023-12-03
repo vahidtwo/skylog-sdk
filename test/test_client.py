@@ -14,7 +14,7 @@ class MockClientSettings:
     SKY_LOG_ALERTING_TELEGRAM_ALERT_NAME: str = ""
     SKY_LOG_ALERTING_PHONE_CALL_ALERT_NAME: str = ""
     SKY_LOG_ALERTING_SMS_ALERT_NAME: str = ""
-    SKY_LOG_BASE_URL: str = ""
+    SKY_LOG_ALERTING_BASE_URL: str = ""
     SKY_LOG_ALERTING_TOKEN: str = ""
 
 
