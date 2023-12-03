@@ -11,7 +11,6 @@ check: ## Run code quality tools.
 	@poetry check --lock
 	@echo "🚀 Linting code: Running pre-commit"
 	@poetry run pre-commit run -a
-	@echo "🚀 Static type checking: Running mypy"
 
 .PHONY: test
 test: ## Test the code with pytest
