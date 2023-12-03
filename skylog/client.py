@@ -38,6 +38,7 @@ class AlertingSkyLogClient(BaseAlertingSkyLogClient, RetryMixin, BaseClient):
         default_provider: str,
         use_proxy: bool = False,
         settings: Optional[LazySettings] = None,
+        enable: bool = True,
         **kwargs,
     ):
         if settings is None:
@@ -52,6 +53,7 @@ class AlertingSkyLogClient(BaseAlertingSkyLogClient, RetryMixin, BaseClient):
         self.provider = default_provider
         self.use_proxy = use_proxy
         self.settings = settings
+        self.enable = enable
         for key, value in kwargs.items():
             setattr(self, key, value)
         super().__init__(settings=settings)
@@ -144,6 +146,7 @@ class AlertingSkyLogClient(BaseAlertingSkyLogClient, RetryMixin, BaseClient):
             summery: summery to explain the situation more.
 
         """
+
         headers = {"Authorization": f"{self.token_type} {self.token}"}
         data = {
             "alertname": provider or self.provider,
@@ -151,6 +154,9 @@ class AlertingSkyLogClient(BaseAlertingSkyLogClient, RetryMixin, BaseClient):
             "description": description,
             "summery": summery,
         }
+        if not self.enable:
+            logger.warning(f"Alerting {instance_name}. {description}")
+            return True
 
         def __request():
             return self.request(headers=headers, json=data, path=path)
