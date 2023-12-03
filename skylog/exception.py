@@ -47,19 +47,3 @@ class RetryException(CustomBaseException):
     def __init__(self, count: int = None):
         extra_explanation = "" if count is not None else f" after {count} retries"
         super().__init__(extra_explanation=extra_explanation)
-
-
-class UploadedFileNotFound(CustomBaseException):
-    default_message = "Our payment file not found on ftp server"
-
-
-class ShaparakReportFileNotFound(CustomBaseException):
-    default_message = "Shaparak reported file not found on ftp server"
-
-
-class ShaparakReportFileHaseErrorFound(CustomBaseException):
-    default_message = "Shaparak reported file hase error ftp server"
-
-
-class ShaparakAnnouncementFileNotFound(CustomBaseException):
-    default_message = "Shaparak announcement file not found on ftp server"
