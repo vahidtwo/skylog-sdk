@@ -34,7 +34,7 @@ pip install skylog-sdk
   - `DEFAULT_SKY_LOG_ALERTING_TELEGRAM_ALERT_NAME`: Default alert name for Telegram
   - `DEFAULT_SKY_LOG_ALERTING_PHONE_CALL_ALERT_NAME`: Default alert name for phone calls
   - `DEFAULT_SKY_LOG_ALERTING_SMS_ALERT_NAME`: Default alert name for SMS
-  - `SKY_LOG_BASE_URL`: Base URL for Skylog API calls
+  - `SKY_LOG_ALERTING_BASE_URL`: Base URL for Skylog API calls
   - `SKY_LOG_ALERTING_TOKEN`: Your Skylog authentication token
 
 - **Proxy Configuration**: If using a proxy, include the following additional variables:
