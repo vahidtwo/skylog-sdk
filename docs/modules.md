@@ -1,1 +1,1 @@
-::: skylog-sdk
+skylog-sdk
