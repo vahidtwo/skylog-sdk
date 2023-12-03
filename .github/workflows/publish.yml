@@ -26,9 +26,15 @@ jobs:
         run: |
           poetry install
 
+
+      - name: Create pip config directory
+        run: mkdir -p ~/.config/pip
+
       - name: Set up PyPI token
         run: |
-          echo "//pypi.org/simple/ ${{ secrets.API_TOKEN }}" > ~/.config/pip/pip.conf
+          echo "[global]" > ~/.config/pip/pip.conf
+          echo "index-url = https://pypi.org/simple/" >> ~/.config/pip/pip.conf
+          echo "pypi-token.pypi = ${{ secrets.PYPI_TOKEN }}" >> ~/.config/pip/pip.conf
 
       - name: Build package
         run: |
