@@ -1,7 +1,13 @@
-# skylog-sdk
+<style>
+.md-grid {
+  max-width: 200rem;
+}
+</style>
+
+# SkyLog SDK
 
 [![Release](https://img.shields.io/github/v/release/vahidtwo/skylog-sdk)](https://img.shields.io/github/v/release/vahidtwo/skylog-sdk)
-[![Build status](https://img.shields.io/github/actions/workflow/status/vahidtwo/skylog-sdk/main.yml?branch=main)](https://github.com/vahidtwo/skylog-sdk/actions/workflows/main.yml?query=branch%3Amain)
+[![Build status](https://img.shields.io/github/actions/workflow/status/vahidtwo/skylog-sdk/main.yml?branch=master)](https://github.com/vahidtwo/skylog-sdk/actions/workflows/main.yml?query=branch%3Amaster)
 [![Commit activity](https://img.shields.io/github/commit-activity/m/vahidtwo/skylog-sdk)](https://img.shields.io/github/commit-activity/m/vahidtwo/skylog-sdk)
 [![License](https://img.shields.io/github/license/vahidtwo/skylog-sdk)](https://img.shields.io/github/license/vahidtwo/skylog-sdk)
 
@@ -23,9 +29,11 @@ This Python SDK facilitates easy interaction with Skylog services, allowing user
 
 install from gitlab
 
-```bash
+<div class="termy">
+```console
 pip install skylog-sdk
 ```
+</div>
 
 ## Setup and Configuration
 
@@ -37,25 +45,59 @@ pip install skylog-sdk
   - `SKY_LOG_BASE_URL`: Base URL for Skylog API calls
   - `SKY_LOG_ALERTING_TOKEN`: Your Skylog authentication token
 
-- **Proxy Configuration**: If using a proxy, include the following additional variables:
-  - `PROXY_USERNAME`
-  - `PROXY_PASSWORD`
-  - `PROXY_IP`
-  - `PROXY_PORT`
+!!! info "**Proxy Configuration**"
+If you want to use proxy, include the following additional variables:
 
-## Usage Example
+    - `PROXY_USERNAME`
+    - `PROXY_PASSWORD`
+    - `PROXY_IP`
+    - `PROXY_PORT`
 
-```python
-from skylog import AlertingSkyLogClient, AlertingProvider
+!!! example "Usage Example"
 
-# Initialize the Skylog client with the desired provider (e.g., Telegram)
-client = AlertingSkyLogClient(provider=AlertingProvider.telegram)
+    === "Simple"
+        <div style="font-size: 20px;">
+        ```py linenums="1"
+          from skylog import AlertingSkyLogClient, AlertingProvider
 
-# Example Operations:
-client.fire_alert(description='Issue detected', instance_name='unique_key', provider=AlertingProvider.sms)
-client.stop_alert(description='Issue resolved', instance_name='unique_key', provider=AlertingProvider.sms)
-client.notify(description='Alert notification', instance_name='unique_key', provider=AlertingProvider.telegram)
-```
+          AlertingProvider(telegram='telegram_rule')
+          # Initialize the Skylog client with the desired provider (e.g., Telegram)
+          client = AlertingSkyLogClient(default_provider=AlertingProvider.telegram)
+          client.fire_alert(description='Issue detected', instance_name='unique_key', provider=AlertingProvider.sms)
+          client.stop_alert(description='Issue resolved', instance_name='unique_key', provider=AlertingProvider.sms)
+          client.notify(description='Alert notification', instance_name='unique_key', provider=AlertingProvider.telegram)
+        ```
+        </div>
+    === "Advance"
+        <div style="font-size: 20px;">
+        ```py linenums="1"
+        from skylog import AlertingSkyLogClient, AlertingProvider
+        from skylog.integration.config import ClientSettings, LazySettings
+
+        class CustomSettings(ClientSettings):
+            ... # some settings
+
+        settings = LazySettings(client_settings_class=CustomSettings)
+
+        AlertingProvider(telegram='telegram_rule')
+        # Initialize the Skylog client with the desired provider (e.g., Telegram)
+        client = AlertingSkyLogClient(
+          default_provider=AlertingProvider.telegram,
+          use_proxy=True,
+          settings=settings,
+          enable=False, # not send data just log data
+          duplicate_request_message='duplicate' # this is the skylog message when get duplicate instance-name
+        )
+        client.fire_alert(
+          description='Issue detected',
+          instance_name='unique_key',
+          provider=AlertingProvider.sms,
+          notify_on_duplicate=True # if got duplicate message from skylog send notify msg
+        )
+        client.stop_alert(description='Issue resolved', instance_name='unique_key', provider=AlertingProvider.sms)
+        client.notify(description='Alert notification', instance_name='unique_key', provider=AlertingProvider.telegram)
+        ```
+        </div>
 
 ## Concepts to Understand
 
