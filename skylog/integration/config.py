@@ -1,4 +1,5 @@
 import dataclasses
+from typing import Type
 
 from decouple import config
 
@@ -28,10 +29,14 @@ class ClientSettings:
 
 class LazySettings:
     _wrapped = None
+    client_settings_class: Type[ClientSettings]
+
+    def __init__(self, client_settings_class: Type[ClientSettings] = ClientSettings):
+        self.client_settings_class = client_settings_class
 
     def _setup(self):
         if self._wrapped is None:
-            setting = dataclasses.dataclass(ClientSettings)()
+            setting = dataclasses.dataclass(self.client_settings_class)()
             setting._setup()
             self._wrapped = setting
         return self._wrapped
