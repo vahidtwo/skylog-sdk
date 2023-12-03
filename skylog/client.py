@@ -1,5 +1,5 @@
 import logging
-from typing import Optional, Type
+from typing import Optional
 
 from requests import Response
 
@@ -36,7 +36,6 @@ class AlertingSkyLogClient(BaseAlertingSkyLogClient, RetryMixin, BaseClient):
         instance_name: str = "default",
         *,
         default_provider: str,
-        provider_dataclass: Type[str] = AlertingProvider,
         use_proxy: bool = False,
         settings: Optional[LazySettings] = None,
         **kwargs,
@@ -46,8 +45,7 @@ class AlertingSkyLogClient(BaseAlertingSkyLogClient, RetryMixin, BaseClient):
                 from django.conf import settings
             except ImportError:
                 from skylog.integration.config import settings
-        self.base_url = settings.SKY_LOG_BASE_URL
-        self._provider_dataclass = provider_dataclass
+        self.base_url = settings.SKY_LOG_ALERTING_BASE_URL
         self.token = settings.SKY_LOG_ALERTING_TOKEN
         self.token_type = "Bearer"
         self._instance_name = instance_name
