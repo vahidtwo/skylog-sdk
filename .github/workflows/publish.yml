@@ -3,7 +3,7 @@ name: Publish Python Package
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   build-and-publish:
@@ -16,7 +16,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.8'
+          python-version: '3.x'
 
       - name: Install Poetry
         run: |
@@ -26,14 +26,14 @@ jobs:
         run: |
           poetry install
 
+      - name: Set up PyPI token
+        run: |
+          echo "//pypi.org/simple/ ${{ secrets.API_TOKEN }}" > ~/.config/pip/pip.conf
+
       - name: Build package
         run: |
           poetry build
 
       - name: Publish to PyPI
-        env:
-          API_TOKEN: ${{ secrets.API_TOKEN }}
         run: |
-          poetry config pypi-token.pypi $API_TOKEN;
-          poetry publish --build 
-
+          poetry publish --build
