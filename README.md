@@ -1,58 +1,48 @@
+# skylog-sdk
 
-# Python SDK for Skylog Integration
+[![Release](https://img.shields.io/github/v/release/vahidtwo/skylog-sdk)](https://img.shields.io/github/v/release/vahidtwo/skylog-sdk)
+[![Build status](https://img.shields.io/github/actions/workflow/status/vahidtwo/skylog-sdk/main.yml?branch=main)](https://github.com/vahidtwo/skylog-sdk/actions/workflows/main.yml?query=branch%3Amain)
+[![codecov](https://codecov.io/gh/vahidtwo/skylog-sdk/branch/main/graph/badge.svg)](https://codecov.io/gh/vahidtwo/skylog-sdk)
+[![Commit activity](https://img.shields.io/github/commit-activity/m/vahidtwo/skylog-sdk)](https://img.shields.io/github/commit-activity/m/vahidtwo/skylog-sdk)
+[![License](https://img.shields.io/github/license/vahidtwo/skylog-sdk)](https://img.shields.io/github/license/vahidtwo/skylog-sdk)
 
-Skylog is a robust service designed for seamless integration with various platforms like Sentry, Telegram,
-and more, enabling the efficient transmission of logs and rapid identification of issues.
+This is a template repository for Python projects that use Poetry for their dependency management.
 
-This Python SDK facilitates easy interaction with Skylog services, allowing users to:
-- fire alert
-- stop alert
-- notify
+- **Github repository**: <https://github.com/vahidtwo/skylog-sdk/>
+- **Documentation** <https://vahidtwo.github.io/skylog-sdk/>
 
-# How to install 
-install from gitlab 
+## Getting started with your project
+
+First, create a repository on GitHub with the same name as this project, and then run the following commands:
+
 ```bash
-pip install skylog-sdk
+git init -b main
+git add .
+git commit -m "init commit"
+git remote add origin git@github.com:vahidtwo/skylog-sdk.git
+git push -u origin main
 ```
 
-## Setup and Configuration
+Finally, install the environment and the pre-commit hooks with
 
-- **Environment Variables**: Configure the following variables in your project environment:
-  - `DEFAULT_SKY_LOG_ALERTING_TELEGRAM_ALERT_NAME`: Default alert name for Telegram
-  - `DEFAULT_SKY_LOG_ALERTING_PHONE_CALL_ALERT_NAME`: Default alert name for phone calls
-  - `DEFAULT_SKY_LOG_ALERTING_SMS_ALERT_NAME`: Default alert name for SMS
-  - `SKY_LOG_BASE_URL`: Base URL for Skylog API calls
-  - `SKY_LOG_ALERTING_TOKEN`: Your Skylog authentication token
-
-- **Proxy Configuration**: If using a proxy, include the following additional variables:
-  - `PROXY_USERNAME`
-  - `PROXY_PASSWORD`
-  - `PROXY_IP`
-  - `PROXY_PORT`
-
-## Usage Example
-
-```python
-from skylog import AlertingSkyLogClient, AlertingProvider
-
-# Initialize the Skylog client with the desired provider (e.g., Telegram)
-client = AlertingSkyLogClient(provider=AlertingProvider.telegram)
-
-# Example Operations:
-client.fire_alert(description='Issue detected', instance_name='unique_key', provider=AlertingProvider.sms)
-client.stop_alert(description='Issue resolved', instance_name='unique_key', provider=AlertingProvider.sms)
-client.notify(description='Alert notification', instance_name='unique_key', provider=AlertingProvider.telegram)
+```bash
+make install
 ```
 
-## Concepts to Understand
+You are now ready to start development on your project!
+The CI/CD pipeline will be triggered when you open a pull request, merge to main, or when you create a new release.
 
-### Alertname and Instance
+To finalize the set-up for publishing to PyPi or Artifactory, see [here](https://fpgmaas.github.io/cookiecutter-poetry/features/publishing/#set-up-for-pypi).
+For activating the automatic documentation with MkDocs, see [here](https://fpgmaas.github.io/cookiecutter-poetry/features/mkdocs/#enabling-the-documentation-on-github).
+To enable the code coverage reports, see [here](https://fpgmaas.github.io/cookiecutter-poetry/features/codecov/).
 
-- **Alertname**: Represents the provider or service. It identifies where Skylog sends alerts.
-- **Instance**: A unique identifier within a group alert, specifying a particular part of a universal alert.
+## Releasing a new version
 
-### Alerts Management
+- Create an API Token on [Pypi](https://pypi.org/).
+- Add the API Token to your projects secrets with the name `PYPI_TOKEN` by visiting [this page](https://github.com/vahidtwo/skylog-sdk/settings/secrets/actions/new).
+- Create a [new release](https://github.com/vahidtwo/skylog-sdk/releases/new) on Github.
+- Create a new tag in the form `*.*.*`.
 
-- **Firing an Alert**: Triggering an alert, resulting in immediate notifications sent to relevant endpoints.
-- **Stopping an Alert**: Removing a fired alert, resolving it and stopping further notifications.
-- **Notifying an Alert**: Sending messages to endpoints without adding records to the triggered list.
+For more details, see [here](https://fpgmaas.github.io/cookiecutter-poetry/features/cicd/#how-to-trigger-a-release).
+
+---
