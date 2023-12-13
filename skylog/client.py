@@ -65,6 +65,7 @@ class AlertingSkyLogClient(BaseAlertingSkyLogClient, RetryMixin, BaseClient):
         summery=None,
         provider: Optional[str] = None,
         notify_on_duplicate: bool = False,
+        _notify_instance_name: Optional[str] = None,
     ) -> bool:
         """
         firing an alert cause to add a record in triggered list in the panel and Immediately notice messages are sent
@@ -77,6 +78,7 @@ class AlertingSkyLogClient(BaseAlertingSkyLogClient, RetryMixin, BaseClient):
             path="fire-alert",
             provider=provider,
             notify_on_duplicate=notify_on_duplicate,
+            _notify_instance_name=_notify_instance_name,
         )
 
     def stop_alert(
@@ -133,6 +135,7 @@ class AlertingSkyLogClient(BaseAlertingSkyLogClient, RetryMixin, BaseClient):
         *,
         provider: Optional[str] = None,
         notify_on_duplicate: bool = False,
+        _notify_instance_name: Optional[str] = None,
     ) -> bool:
         """
         Parameter:
@@ -181,7 +184,7 @@ class AlertingSkyLogClient(BaseAlertingSkyLogClient, RetryMixin, BaseClient):
             description = self.get_notify_on_duplicated_message(description)
             return self.notify(
                 description=description,
-                instance_name=instance_name,
+                instance_name=_notify_instance_name or instance_name,
                 summery=summery,
                 provider=provider,
             )
@@ -199,5 +202,5 @@ class AlertingSkyLogClient(BaseAlertingSkyLogClient, RetryMixin, BaseClient):
         return True
 
     @staticmethod
-    def get_notify_on_duplicated_message(description: str) -> str:
-        return f"{description}"
+    def get_notify_on_duplicated_message(description: str, extra_info: Optional[str] = None) -> str:
+        return f"{description} \n {extra_info}" if extra_info is not None else description
