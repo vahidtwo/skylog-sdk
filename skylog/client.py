@@ -27,6 +27,7 @@ class AlertingSkyLogClient(BaseAlertingSkyLogClient, RetryMixin, BaseClient):
     """
 
     duplicate_request_message = "Already Active"
+    alert_instance_not_exists = "Alert Instance Doesn't Exists"
 
     base_url = ...
 
@@ -188,7 +189,7 @@ class AlertingSkyLogClient(BaseAlertingSkyLogClient, RetryMixin, BaseClient):
                 summery=summery,
                 provider=provider,
             )
-        if data["status"] is False:
+        if data["status"] is False and data.get("message") != self.alert_instance_not_exists:
             logger.error(
                 "failed to send alerting skylog",
                 extra={
