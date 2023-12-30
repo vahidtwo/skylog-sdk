@@ -7,6 +7,7 @@
 
 - **Github repository**: <https://github.com/vahidtwo/skylog-sdk/>
 - **Documentation** <https://vahidtwo.github.io/skylog-sdk/>
+- **PIPY Package** <https://pypi.org/project/skylog-sdk/>
 
 # Python SDK for Skylog Integration
 
