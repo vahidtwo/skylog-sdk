@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "skylog-sdk"
-version = "0.1.13"
+version = "0.1.14"
 description = "skylog python sdk"
 authors = ["vahidtwo <vahidtwo@gmail.com>"]
 repository = "https://github.com/vahidtwo/skylog-sdk"
@@ -11,7 +11,7 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.8.17"
+python = "^3.8.13"
 requests = "^2.31"
 python-decouple = "^3.6"
 
