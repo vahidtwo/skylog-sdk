@@ -11,9 +11,9 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.8.12"
-requests = "^2.31"
-python-decouple = "^3.6"
+python = ">=3.8.12"
+requests = ">=2.31"
+python-decouple = ">=3.6"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.4.0"
