@@ -33,10 +33,11 @@ class BaseClient:
     requests_timeout = 30
 
     def __init__(self, settings: Type[LazySettings]):
-        self.proxy_username = self.clean_string(settings.PROXY_USERNAME)
-        self.proxy_password = self.clean_string(settings.PROXY_PASSWORD)
-        self.proxy_ip = self.clean_string(settings.PROXY_IP)
-        self.proxy_port = self.clean_string(settings.PROXY_PORT)
+        if self.use_proxy:
+            self.proxy_username = self.clean_string(settings.PROXY_USERNAME)
+            self.proxy_password = self.clean_string(settings.PROXY_PASSWORD)
+            self.proxy_ip = self.clean_string(settings.PROXY_IP)
+            self.proxy_port = self.clean_string(settings.PROXY_PORT)
         self.session = self.create_session()
 
     @staticmethod
