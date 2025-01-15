@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "skylog-sdk"
-version = "0.1.14a"
+version = "0.1.15"
 description = "skylog python sdk"
 authors = ["vahidtwo <vahidtwo@gmail.com>"]
 repository = "https://github.com/vahidtwo/skylog-sdk"
